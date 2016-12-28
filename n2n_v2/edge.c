@@ -41,6 +41,9 @@ struct SCM_def sd = {
         .stop = n2n_stop,
 };
 
+#ifdef WIN32
+#define strncasecmp _strnicmp
+#endif
 
 #if defined(DEBUG)
 #define SOCKET_TIMEOUT_INTERVAL_SECS    5
@@ -2262,7 +2265,7 @@ int real_main(int argc, char* argv[])
     /* unfortunately, any cmdline quoting used originally is gone, so we can
      * not use the getopt to process the install
      */
-    if (!strncasecmp(effectiveargv[1],"--install",9)) {
+    if (effectiveargc>1 && !strncasecmp(effectiveargv[1],"--install",9)) {
         char *p = strchr(linebuffer,' ') +1; /* skip the argv[0] */
         char *scm_args = strchr(p,' ') +1; /* skip the "--install" */
 
